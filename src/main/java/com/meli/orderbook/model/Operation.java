@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.meli.orderbook.enums.OperationType;
 import com.meli.orderbook.enums.Status;
 import lombok.Data;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -28,5 +29,9 @@ public class Operation {
     @DynamoDBTypeConvertedEnum
     private OperationType type;
     private Audit audit;
+
+    public String hash() {
+        return DigestUtils.md5Hex(toString());
+    }
 
 }
