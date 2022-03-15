@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 public class OperationDto {
 
-    private Long id;
+    private String immutableId;
     private BigDecimal value;
     private int quantity;
     private String user;

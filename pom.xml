@@ -9,12 +9,13 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.meli</groupId>
-	<artifactId>Order-Book</artifactId>
+	<artifactId>order-book</artifactId>
 	<version>0.0.1</version>
 	<name>Order-Book</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Order book API</description>
 	<properties>
 		<java.version>17</java.version>
+		<dynamodb.version>1.12.178</dynamodb.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -49,6 +50,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-dynamodb</artifactId>
+			<version>${dynamodb.version}</version>
 		</dependency>
 	</dependencies>
 
