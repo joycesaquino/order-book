@@ -34,4 +34,14 @@ public class Operation {
         return DigestUtils.md5Hex(toString());
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "value=" + value +
+                ", quantity=" + quantity +
+                ", user='" + user +
+                ", status=" + status +
+                ", type=" + type +
+                '}';
+    }
 }
