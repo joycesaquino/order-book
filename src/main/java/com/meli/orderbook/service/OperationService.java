@@ -26,12 +26,8 @@ public class OperationService {
         var operation = operationConverter.apply(dto);
         operation.setHash(operation.hash());
 
-        if (dto.getOperationType().equals(OperationType.SALE)) {
-            saleRepository.save(operation);
-        }
+        if (dto.getOperationType().equals(OperationType.SALE)) saleRepository.save(operation);
+        if (dto.getOperationType().equals(OperationType.BUY)) buyRepository.save(operation);
 
-        if (dto.getOperationType().equals(OperationType.BUY)) {
-            buyRepository.save(operation);
-        }
     }
 }
