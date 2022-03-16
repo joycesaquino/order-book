@@ -1,5 +1,6 @@
 package com.meli.orderbook.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class ApiErrorMessage {
 
     private HttpStatus status;
