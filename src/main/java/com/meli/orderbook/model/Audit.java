@@ -1,5 +1,6 @@
 package com.meli.orderbook.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 public class Audit {
 
-    private LocalDateTime createdAt;
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
     private String createdBy;
     private String updatedBy;

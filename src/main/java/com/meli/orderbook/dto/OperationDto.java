@@ -1,12 +1,12 @@
 package com.meli.orderbook.dto;
 
-import com.meli.orderbook.enums.OperationType;
-import com.meli.orderbook.enums.Status;
+import com.meli.orderbook.enums.operation.Type;
+import com.meli.orderbook.enums.operation.Status;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
@@ -21,10 +21,10 @@ public class OperationDto {
 
     private String user;
 
-    @NotEmpty
+    @NotNull
     private Status status;
 
-    @NotEmpty
-    private OperationType operationType;
+    @NotNull
+    private Type operationType;
 
 }

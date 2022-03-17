@@ -1,8 +1,8 @@
 package com.meli.orderbook.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.meli.orderbook.enums.OperationType;
-import com.meli.orderbook.enums.Status;
+import com.meli.orderbook.enums.operation.Type;
+import com.meli.orderbook.enums.operation.Status;
 import lombok.Data;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Operation {
 
     @DynamoDBRangeKey
+    @DynamoDBDelimited(attributeNames = {"status", "user", "timestamp"})
     private Id id;
     private UUID requestId;
     private String hash;
@@ -27,7 +28,7 @@ public class Operation {
 
     @DynamoDBHashKey
     @DynamoDBTypeConvertedEnum
-    private OperationType type;
+    private Type type;
     private Audit audit;
 
     public String hash() {
