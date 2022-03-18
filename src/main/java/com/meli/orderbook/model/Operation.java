@@ -29,6 +29,7 @@ public class Operation {
     @DynamoDBHashKey
     @DynamoDBTypeConvertedEnum
     private Type type;
+
     private Audit audit;
 
     public String hash() {

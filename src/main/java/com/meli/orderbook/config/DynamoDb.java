@@ -1,5 +1,8 @@
 package com.meli.orderbook.config;
 
+import com.amazonaws.auth.AWSCredentialsProviderChain;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -14,9 +17,12 @@ public class DynamoDb {
 
     @Bean
     public AmazonDynamoDB amazonDynamoDB(@Value("${amazon.dynamo.endpoint}") String endpoint,
-                                         @Value("${amazon.dynamo.region:sa-east-1}") String region) {
+                                         @Value("${amazon.dynamo.region:sa-east-1}") String region,
+                                         @Value("${amazon.dynamo.accessKey}") String accessKey,
+                                         @Value("${amazon.dynamo.secretKey}") String secretKey) {
         return AmazonDynamoDBClient
                 .builder()
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
                 .build();
     }
@@ -48,6 +54,5 @@ public class DynamoDb {
                 .withTableNameOverride(DynamoDBMapperConfig.TableNameOverride.withTableNameReplacement(tableName))
                 .build();
     }
-
 
 }
