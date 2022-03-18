@@ -7,19 +7,18 @@ import lombok.Data;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
-@DynamoDBTable(tableName = "operations")
+@DynamoDBTable(tableName = "order-book-operation")
 public class Operation {
 
     @DynamoDBRangeKey
-    @DynamoDBDelimited(attributeNames = {"status", "user", "timestamp"})
+    @DynamoDBDelimited(attributeNames = {"status", "userId", "requestId"})
     private Id id;
 
     private BigDecimal value;
     private int quantity;
-    private String user;
+    private Long userId;
 
     @DynamoDBTypeConvertedEnum
     private Status status;
@@ -39,7 +38,7 @@ public class Operation {
         return "{" +
                 "value=" + value +
                 ", quantity=" + quantity +
-                ", user='" + user +
+                ", userId='" + userId +
                 ", status=" + status +
                 ", type=" + type +
                 '}';

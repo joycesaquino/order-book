@@ -19,10 +19,7 @@ public class OperationDto {
     @DecimalMin(value = "1")
     private int quantity;
 
-    private String user;
-
-    @NotNull
-    private Status status;
+    private Long userId;
 
     @NotNull
     private Type operationType;

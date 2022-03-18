@@ -15,7 +15,7 @@ public class Id {
     @DynamoDBTypeConvertedEnum
     private Status status;
 
-    private String user;
+    private Long userId;
     private UUID requestId;
 
 }
