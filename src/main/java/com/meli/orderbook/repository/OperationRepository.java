@@ -1,22 +1,23 @@
-package com.meli.orderbook.repository.sale;
+package com.meli.orderbook.repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.meli.orderbook.model.Operation;
-import com.meli.orderbook.repository.QueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class SaleRepository {
+public class OperationRepository {
 
-    private final DynamoDBMapper saleMapper;
+    private final DynamoDBMapper operationMapper;
     private final QueryFactory query;
 
     public void save(Operation operation) {
+        var audit = operation.getAudit();
+
         try {
-            saleMapper.save(operation, query.saveWith(operation.getHash()));
+            operationMapper.save(operation, query.saveWith(audit.getHash()));
         } catch (ConditionalCheckFailedException ignore) {
         }
     }

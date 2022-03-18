@@ -2,32 +2,27 @@ package com.meli.orderbook.service;
 
 import com.meli.orderbook.converter.OperationConverter;
 import com.meli.orderbook.dto.OperationDto;
-import com.meli.orderbook.enums.operation.Type;
-import com.meli.orderbook.repository.buy.BuyRepository;
-import com.meli.orderbook.repository.sale.SaleRepository;
+import com.meli.orderbook.repository.OperationRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OperationService {
 
-    private final SaleRepository saleRepository;
-    private final BuyRepository buyRepository;
+    private final OperationRepository operationRepository;
     private final OperationConverter operationConverter;
 
-    public OperationService(SaleRepository saleRepository,
-                            BuyRepository buyRepository,
+    public OperationService(OperationRepository operationRepository,
                             OperationConverter operationConverter) {
-        this.saleRepository = saleRepository;
-        this.buyRepository = buyRepository;
+        this.operationRepository = operationRepository;
         this.operationConverter = operationConverter;
     }
 
     public void save(OperationDto dto) {
-        var operation = operationConverter.apply(dto);
-        operation.setHash(operation.hash());
 
-        if (dto.getOperationType().equals(Type.SALE)) saleRepository.save(operation);
-        if (dto.getOperationType().equals(Type.BUY)) buyRepository.save(operation);
+        var operation = operationConverter.apply(dto);
+        var audit = operation.getAudit();
+        audit.setHash(operation.hash());
+        operationRepository.save(operation);
 
     }
 }

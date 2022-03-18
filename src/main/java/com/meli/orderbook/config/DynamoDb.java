@@ -4,6 +4,7 @@ import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -16,35 +17,32 @@ import org.springframework.context.annotation.Configuration;
 public class DynamoDb {
 
     @Bean
-    public AmazonDynamoDB amazonDynamoDB(@Value("${amazon.dynamo.endpoint}") String endpoint,
+    public AmazonDynamoDB amazonDynamoDB(@Value("${amazon.dynamo.endpoint:}") String endpoint,
                                          @Value("${amazon.dynamo.region:sa-east-1}") String region,
                                          @Value("${amazon.dynamo.accessKey}") String accessKey,
                                          @Value("${amazon.dynamo.secretKey}") String secretKey) {
-        return AmazonDynamoDBClient
-                .builder()
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
-                .build();
+
+        var dynamoClientBuilder = AmazonDynamoDBClient.builder();
+        dynamoClientBuilder
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)));
+
+        if (endpoint.isBlank()) {
+            dynamoClientBuilder.withRegion(Regions.fromName(region));
+        } else {
+            dynamoClientBuilder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region));
+        }
+        return dynamoClientBuilder.build();
+
     }
 
     @Bean
-    public DynamoDBMapperConfig buyConfigMapper(@Value("${amazon.dynamo.table.buy}") String buyTable) {
-        return dynamoDBMapperConfig(buyTable);
+    public DynamoDBMapperConfig operationConfigMapper(@Value("${amazon.dynamo.table.operation}") String operationTable) {
+        return dynamoDBMapperConfig(operationTable);
     }
 
     @Bean
-    public DynamoDBMapperConfig saleConfigMapper(@Value("${amazon.dynamo.table.sale}") String saleTable) {
-        return dynamoDBMapperConfig(saleTable);
-    }
-
-    @Bean
-    public DynamoDBMapper saleMapper(AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig saleConfigMapper) {
-        return new DynamoDBMapper(amazonDynamoDB, saleConfigMapper);
-    }
-
-    @Bean
-    public DynamoDBMapper buyMapper(AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig buyConfigMapper) {
-        return new DynamoDBMapper(amazonDynamoDB, buyConfigMapper);
+    public DynamoDBMapper operationMapper(AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig operationMapper) {
+        return new DynamoDBMapper(amazonDynamoDB, operationMapper);
     }
 
     public DynamoDBMapperConfig dynamoDBMapperConfig(String tableName) {

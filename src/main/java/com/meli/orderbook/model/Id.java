@@ -5,7 +5,7 @@ import com.meli.orderbook.enums.operation.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Data
@@ -16,6 +16,6 @@ public class Id {
     private Status status;
 
     private String user;
-    private LocalDateTime timestamp;
+    private UUID requestId;
 
 }

@@ -16,8 +16,6 @@ public class Operation {
     @DynamoDBRangeKey
     @DynamoDBDelimited(attributeNames = {"status", "user", "timestamp"})
     private Id id;
-    private UUID requestId;
-    private String hash;
 
     private BigDecimal value;
     private int quantity;
