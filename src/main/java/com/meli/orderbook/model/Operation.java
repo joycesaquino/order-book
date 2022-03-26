@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class Operation {
 
     @DynamoDBRangeKey
-    @DynamoDBDelimited(attributeNames = {"status", "userId", "requestId"})
+    @DynamoDBDelimited(attributeNames = {"userId", "requestId"})
     private Id id;
 
     private BigDecimal value;
@@ -21,6 +21,7 @@ public class Operation {
     private Long userId;
 
     @DynamoDBTypeConvertedEnum
+    @DynamoDBIndexRangeKey
     private Status status;
 
     @DynamoDBHashKey
