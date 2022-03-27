@@ -22,11 +22,12 @@ public class Operation {
     private Long userId;
 
     @DynamoDBTypeConvertedEnum
-    @DynamoDBIndexRangeKey(attributeName = "operationStatus", localSecondaryIndexName = "operationStatusIndex")
+    @DynamoDBIndexHashKey(attributeName = "operationStatus", globalSecondaryIndexName = "operationStatusAndOperationTypeIndex")
     private Status operationStatus;
 
     @DynamoDBHashKey
     @DynamoDBTypeConvertedEnum
+    @DynamoDBIndexRangeKey(attributeName = "operationType", localSecondaryIndexName = "operationStatusAndOperationTypeIndex")
     private Type operationType;
 
     private Audit audit;
