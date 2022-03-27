@@ -22,7 +22,7 @@ public class Operation {
     private Long userId;
 
     @DynamoDBTypeConvertedEnum
-    @DynamoDBIndexRangeKey(attributeName = "operationStatus", localSecondaryIndexName = "operationStatus-index")
+    @DynamoDBIndexRangeKey(attributeName = "operationStatus", localSecondaryIndexName = "operationStatusIndex")
     private Status operationStatus;
 
     @DynamoDBHashKey
