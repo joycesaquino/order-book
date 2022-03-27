@@ -14,10 +14,9 @@ public class OperationRepository {
     private final QueryFactory query;
 
     public void save(Operation operation) {
-        var audit = operation.getAudit();
 
         try {
-            operationMapper.save(operation, query.saveWith(audit.getHash()));
+            operationMapper.save(operation, query.saveWith(operation.getHash()));
         } catch (ConditionalCheckFailedException ignore) {
         }
     }

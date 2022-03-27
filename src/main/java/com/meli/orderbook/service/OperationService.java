@@ -20,8 +20,7 @@ public class OperationService {
     public void save(OperationDto dto) {
 
         var operation = operationConverter.apply(dto);
-        var audit = operation.getAudit();
-        audit.setHash(operation.hash());
+        operation.setHash(operation.hash());
         operationRepository.save(operation);
 
     }

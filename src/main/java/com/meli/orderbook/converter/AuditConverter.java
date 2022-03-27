@@ -21,8 +21,6 @@ public class AuditConverter implements Function<Operation, Audit> {
         var timestamp = new Timestamp(calendar.getTime().getTime());
 
         var audit = new Audit();
-        audit.setHash(operation.hash());
-        audit.setRequestId(UUID.randomUUID());
         audit.setCreatedAt(timestamp);
         audit.setUpdatedAt(timestamp);
         audit.setUpdatedBy(API);

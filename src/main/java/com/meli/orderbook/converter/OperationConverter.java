@@ -2,11 +2,11 @@ package com.meli.orderbook.converter;
 
 import com.meli.orderbook.dto.OperationDto;
 import com.meli.orderbook.enums.operation.Status;
-import com.meli.orderbook.enums.operation.Type;
 import com.meli.orderbook.model.Id;
 import com.meli.orderbook.model.Operation;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -23,15 +23,15 @@ public class OperationConverter implements Function<OperationDto, Operation> {
 
         var operation = new Operation();
         var audit = auditConverter.apply(operation);
-        var status = Status.IN_TRADE;
-        operation.setId(new Id(dto.getUserId(), audit.getRequestId()));
+        var requestId = UUID.randomUUID();
+        operation.setId(new Id(dto.getUserId(), requestId));
         operation.setValue(dto.getValue());
         operation.setQuantity(dto.getQuantity());
-        operation.setOperationStatus(status);
-        operation.setType(dto.getOperationType());
+        operation.setOperationStatus(Status.IN_TRADE);
+        operation.setOperationType(dto.getOperationType());
+        operation.setRequestId(requestId);
         operation.setAudit(audit);
-
-        operation.setAudit(audit);
+        operation.setHash(operation.hash());
 
         return operation;
     }

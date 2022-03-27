@@ -7,6 +7,7 @@ import lombok.Data;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @DynamoDBTable(tableName = "order-book-operation")
@@ -26,9 +27,13 @@ public class Operation {
 
     @DynamoDBHashKey
     @DynamoDBTypeConvertedEnum
-    private Type type;
+    private Type operationType;
 
     private Audit audit;
+
+    private UUID requestId;
+    private String hash;
+
 
     public String hash() {
         return DigestUtils.md5Hex(toString());
@@ -41,7 +46,7 @@ public class Operation {
                 ", quantity=" + quantity +
                 ", userId='" + userId +
                 ", status=" + operationStatus +
-                ", type=" + type +
+                ", type=" + operationType +
                 '}';
     }
 }
