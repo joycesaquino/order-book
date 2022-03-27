@@ -35,7 +35,7 @@ class OperationConverterTest {
             final var audit = new Audit();
             when(auditConverter.apply(operation)).thenReturn(audit);
             Operation apply = converter.apply(dto);
-            assertEquals(apply.getStatus(), Status.IN_OFFER);
+            assertEquals(apply.getOperationStatus(), Status.IN_OFFER);
         }
 
 
@@ -50,7 +50,7 @@ class OperationConverterTest {
             final var audit = new Audit();
             when(auditConverter.apply(operation)).thenReturn(audit);
             Operation apply = converter.apply(dto);
-            assertEquals(apply.getStatus(), Status.AVAILABLE);
+            assertEquals(apply.getOperationStatus(), Status.AVAILABLE);
         }
     }
 

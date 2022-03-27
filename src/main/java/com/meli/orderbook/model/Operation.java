@@ -21,8 +21,8 @@ public class Operation {
     private Long userId;
 
     @DynamoDBTypeConvertedEnum
-    @DynamoDBIndexRangeKey
-    private Status status;
+    @DynamoDBIndexRangeKey(attributeName = "operationStatus", localSecondaryIndexName = "operationStatus-index")
+    private Status operationStatus;
 
     @DynamoDBHashKey
     @DynamoDBTypeConvertedEnum
@@ -40,7 +40,7 @@ public class Operation {
                 "value=" + value +
                 ", quantity=" + quantity +
                 ", userId='" + userId +
-                ", status=" + status +
+                ", status=" + operationStatus +
                 ", type=" + type +
                 '}';
     }

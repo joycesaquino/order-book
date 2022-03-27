@@ -23,11 +23,11 @@ public class OperationConverter implements Function<OperationDto, Operation> {
 
         var operation = new Operation();
         var audit = auditConverter.apply(operation);
-        var status = dto.getOperationType().equals(Type.SALE) ? Status.IN_OFFER : Status.AVAILABLE;
+        var status = Status.IN_TRADE;
         operation.setId(new Id(dto.getUserId(), audit.getRequestId()));
         operation.setValue(dto.getValue());
         operation.setQuantity(dto.getQuantity());
-        operation.setStatus(status);
+        operation.setOperationStatus(status);
         operation.setType(dto.getOperationType());
         operation.setAudit(audit);
 

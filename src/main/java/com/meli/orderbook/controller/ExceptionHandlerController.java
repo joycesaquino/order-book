@@ -1,5 +1,6 @@
 package com.meli.orderbook.controller;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.meli.orderbook.model.ApiErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,14 @@ public class ExceptionHandlerController {
     public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException exception) {
         String message = exception.getMessage().replace("save.", "");
         ResponseEntity<Object> responseEntity = createResponseEntity(UNPROCESSABLE_ENTITY, message);
+        log.debug(Objects.requireNonNull(responseEntity.getBody()).toString());
+        return responseEntity;
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    public ResponseEntity<?> handleUnprocessableEntity(InvalidFormatException exception) {
+        ResponseEntity<Object> responseEntity = createResponseEntity(UNPROCESSABLE_ENTITY, exception.getMessage());
         log.debug(Objects.requireNonNull(responseEntity.getBody()).toString());
         return responseEntity;
     }
