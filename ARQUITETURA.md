@@ -16,9 +16,10 @@ O que preciso fazer ?
 ### Banco de dados
 
 - Escolhi o Dynamo considerando um banco auto-gerenciado o qual não preciso me preocupar com scale e disponibilidade, salvo a preocupação com as configurações que seriam feitas considerando WCU e LCU de acordo com o volume das requisições;
-- A modelagem usando o tipo do evento como hash key e o status como range key irá me permitir fazer uma busca otimizada de todas as transações do tipo e status que preciso, as mesmas seriam ordenadas por data garantindo uma fila para o match entre compra e venda;
-- O uso do Dynamo Stream vai permitir que a arquitetura seja estimulada a cada evento permitindo que as ordens que eventualmente não derem match e fiquem com status IN_TRADE em algum momento sejam concluídas
+- Na modelagem usando o tipo do evento como hash key irá me permitir fazer uma busca otimizada de todas as transações do tipo que preciso, o Id concatenando userId e UUID irá garantir a unicidade dos registros, criei um indice secundário com tipo e status para usar de apoio na busca para as ordens disponíveis para negociação, as mesmas seriam ordenadas por data garantindo uma fila para o match entre compra e venda;
+- O uso do Dynamo Stream vai permitir que a arquitetura seja estimulada a cada evento permitindo que as ordens que eventualmente não derem match e fiquem com status IN_TRADE em algum momento sejam concluídas;
 - O uso da maquina de estados considerando a disponibilidade do registro de compra e venda irá garantir que compra e venda deem match com um único registro, garantindo assim a consistência no fluxo;
+- Estou usando Update transacional do Dynamo para gerenciar concorreência entre a atualização dos registros;
 - Caso um registro já tenha "race condition" na atualização do mesmo seria usado o ConditionalCheckFailed do banco como parâmetro para retentativa no match desse registro com outros possíveis.
 
 ### Order Book API
@@ -44,25 +45,25 @@ Dynamo Stream Output
 
     {
         "operationType": "BUY",
-        "id": "AVAILABLE|334455|daa42855-7786-4a27-a9c6-8917dd26e2a7",
+        "id": "334455|daa42855-7786-4a27-a9c6-8917dd26e2a7",
         "quantity": 10,
         "value": 100.99,
         "userId": 334455,
-        "status": "AVAILABLE",
+        "operationStatus": "IN_TRADE",
+        "requestId": "daa42855-7786-4a27-a9c6-8917dd26e2a7",
+        "hash": "871006e4a3b6f1234bbccecedc8e5f46",
         "audit": {
             "createdAt": "2022-03-18T15:43:51.456Z",
             "updatedBy": "API",
-            "requestId": "daa42855-7786-4a27-a9c6-8917dd26e2a7",
-            "hash": "871006e4a3b6f1234bbccecedc8e5f46",
             "updatedAt": "2022-03-18T15:43:51.456Z"
         }
     }
 
 ### Match Engine
 
-- Função serverless feita em Golang. Rsponsável pelo match entre compras e vendas de Vibranium.
-- A cada evento de compra recebido, todos as vendas com status IN_OFFER e disponibilidade AVAILABLE são ordendas por data e é feito processo de Match parcial ou total.
-- Caso o processo de match não aconteca o evento é alterado para status IN_TRADE e com o update a arquitetrua é reestimulada para que determinado evento passe novamente pelo processo de match até que seja encontrado uma compra para determiada venda e vice e versa.
+- Função serverless feita em Golang. Rsponsável pelo match entre compras e vendas de operações.
+- A cada evento de compra recebido, todos as vendas com status IN_TRADE são ordendas por data e é feito processo de Match parcial ou total.
+- Caso o processo de match não aconteca o evento é alterado para status IN_TRADE e com o update a arquitetura é reestimulada para que determinado evento passe novamente pelo processo de match até que seja encontrado uma compra para determinada venda e vice e versa.
 - Caso o match aconteça o status do evento é alterado com um TTL para que a linha seja deletada, a ideia da deleção é para que banco não cresca infinitamente, principalmente considerando que teremos todo histórico dessas transações no S3 conforme desenhado na arquitetura.
 - O event source mapping da função é o evento do dynamo stream.
 - O output dessa função é uma lista de matchs com tipo de operação que será feita na conta de determinado userId, os matchs são enviados para uma fila SQS que posteriormente será consumida por uma função ou também poderia ser consumido pela própria API.
@@ -75,16 +76,16 @@ Input - Dynamo Db Event
 
         {
           "operationType": "BUY",
-          "id": "AVAILABLE|334455|daa42855-7786-4a27-a9c6-8917dd26e2a7",
+          "id": "334455|daa42855-7786-4a27-a9c6-8917dd26e2a7",
           "quantity": 10,
           "value": 100.99,
           "userId": 334455,
-          "status": "AVAILABLE",
+          "status": "IN_TRADE",
+          "requestId": "daa42855-7786-4a27-a9c6-8917dd26e2a7",
+          "hash": "871006e4a3b6f1234bbccecedc8e5f46",
           "audit": {
               "createdAt": "2022-03-18T15:43:51.456Z",
               "updatedBy": "API",
-              "requestId": "daa42855-7786-4a27-a9c6-8917dd26e2a7",
-              "hash": "871006e4a3b6f1234bbccecedc8e5f46",
               "updatedAt": "2022-03-18T15:43:51.456Z"
           }
       }

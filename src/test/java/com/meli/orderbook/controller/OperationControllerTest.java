@@ -2,7 +2,6 @@ package com.meli.orderbook.controller;
 
 import com.meli.orderbook.dto.OperationDto;
 import com.meli.orderbook.enums.operation.Type;
-import com.meli.orderbook.model.Operation;
 import com.meli.orderbook.service.OperationService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
