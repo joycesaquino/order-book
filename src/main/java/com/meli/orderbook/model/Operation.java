@@ -32,7 +32,7 @@ public class Operation {
 
     private Audit audit;
 
-    private UUID requestId;
+    private UUID traceId;
     private String hash;
 
 

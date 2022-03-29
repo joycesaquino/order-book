@@ -29,7 +29,7 @@ public class OperationConverter implements Function<OperationDto, Operation> {
         operation.setQuantity(dto.getQuantity());
         operation.setOperationStatus(Status.IN_TRADE);
         operation.setOperationType(dto.getOperationType());
-        operation.setRequestId(requestId);
+        operation.setTraceId(requestId);
         operation.setAudit(audit);
         operation.setHash(operation.hash());
 

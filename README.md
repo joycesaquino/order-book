@@ -1,4 +1,4 @@
-# Sale and Buy API for order book
+# Order book API
 
 This API implements a service that will be responsible to transactions about sale and buy in order book project
 

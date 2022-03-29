@@ -1,7 +1,6 @@
 package com.meli.orderbook.dto;
 
 import com.meli.orderbook.enums.operation.Type;
-import com.meli.orderbook.enums.operation.Status;
 import lombok.Getter;
 import lombok.Setter;
 
