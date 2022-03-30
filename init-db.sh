@@ -39,7 +39,3 @@ function createTable() {
 
 configure
 createTable
-
-printf '\nListing all created tables'
-
-aws dynamodb list-tables
