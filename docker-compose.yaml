@@ -3,14 +3,23 @@ version: '3.7'
 services:
   localstack:
     container_name: order-book-api
-    image: localstack/localstack
+    image: localstack/localstack:latest
     ports:
-      - "4566:4566"
+      - "4566-4597:4566-4597"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
     environment:
+      - AWS_HOST=localstack
+      - AWS_PORT=4566
       - SERVICES=dynamodb,dynamodbstreams
-      - DEBUG=${DEBUG-}
       - PORT-WEB-UI=${PORT_WEB_UI-}
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DATA_DIR=${TMPDIR}/localstack/data
+      - HOST_TMP_FOLDER=${TMPDIR}
+      - LOCALSTACK_HOSTNAME=http://${LOCALSTACK_HOSTNAME}:4566
+      - AWS_ACCESS_KEY_ID=default_access_key
+      - AWS_SECRET_ACCESS_KEY=default_secret_key
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - ".:/docker-entrypoint-initaws.d"
+      - ${TMPDIR}:/tmp/localstack
+      - ./init-scripts:/docker-entrypoint-initaws.d/

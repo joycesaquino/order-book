@@ -23,13 +23,14 @@ public class OperationConverter implements Function<OperationDto, Operation> {
 
         var operation = new Operation();
         var audit = auditConverter.apply(operation);
-        var requestId = UUID.randomUUID();
-        operation.setId(new Id(dto.getUserId(), requestId));
+        var traceId = UUID.randomUUID();
+        operation.setId(new Id(dto.getUserId(), traceId));
+        operation.setUserId(dto.getUserId());
         operation.setValue(dto.getValue());
         operation.setQuantity(dto.getQuantity());
         operation.setOperationStatus(Status.IN_TRADE);
         operation.setOperationType(dto.getOperationType());
-        operation.setTraceId(requestId);
+        operation.setTraceId(traceId);
         operation.setAudit(audit);
         operation.setHash(operation.hash());
 

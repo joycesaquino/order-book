@@ -1,5 +1,7 @@
 #!/bin/bash
 
+endpointUrl=http://${AWS_HOST}:${AWS_PORT}
+
 function configure(){
     aws configure set aws_access_key_id default_access_key
     aws configure set aws_secret_access_key default_secret_key
@@ -8,7 +10,7 @@ function configure(){
 
 function createTable() {
     printf 'Creating order book table'
-    aws dynamodb --endpoint-url=http://localhost:4566 create-table --table-name order-book-operation \
+    aws dynamodb --endpoint-url=${endpointUrl} create-table --table-name order-book-operation \
     --attribute-definitions \
         AttributeName=id,AttributeType=S \
         AttributeName=operationType,AttributeType=S \
@@ -39,3 +41,4 @@ function createTable() {
 
 configure
 createTable
+

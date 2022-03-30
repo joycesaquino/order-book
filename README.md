@@ -23,3 +23,8 @@ Request
 Expected response
 
     HTTP create 201
+
+Validate in local database
+
+    aws dynamodb scan --table-name order-book-operation --endpoint-url http://localhost:4566
+
