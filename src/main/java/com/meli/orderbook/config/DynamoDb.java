@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class DynamoDb {
 
     @Bean
-    public AmazonDynamoDB amazonDynamoDB(@Value("${amazon.dynamo.endpoint:}") String endpoint,
+    public AmazonDynamoDB amazonDynamoDB(@Value("${amazon.dynamo.endpoint:http://localhost:4566}") String endpoint,
                                          @Value("${amazon.dynamo.region:sa-east-1}") String region,
                                          @Value("${amazon.dynamo.accessKey}") String accessKey,
                                          @Value("${amazon.dynamo.secretKey}") String secretKey) {

@@ -8,6 +8,10 @@ How to test ?
     - docker-compose up
     - Run OrderBookApplication
 
+API Documentation
+
+    http://localhost:8082/docs
+
 Request
 
     curl --location --request POST 'localhost:8081/operations' \
@@ -16,7 +20,7 @@ Request
     "value": 1334.99,
     "quantity": 200,
     "userId": 2233998,
-    "status": "IN_OFFER",
+    "status": "IN_TRADE",
     "operationType": "SALE"
     }'
 

@@ -4,14 +4,14 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
 @DynamoDBDocument
 public class Audit {
 
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
     private String updatedBy;
 }
